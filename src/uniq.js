@@ -1,3 +1,5 @@
+var _curry1 = require('./internal/_curry1');
+var _toArray = require('./internal/_toArray.js');
 var equals = require('./equals');
 var uniqWith = require('./uniqWith');
 
@@ -18,4 +20,12 @@ var uniqWith = require('./uniqWith');
  *      R.uniq([1, '1']);     //=> [1, '1']
  *      R.uniq([[42], [42]]); //=> [[42]]
  */
-module.exports = uniqWith(equals);
+module.exports = (function uniq(list) {
+  // Rely on the native Set implementation if available for performance reasons (see
+  if (typeof Set == 'function') {
+    return _curry1(function uniq(list) {
+      return _toArray(new Set(list));
+    });
+  }
+  return uniqWith(equals);
+}());
